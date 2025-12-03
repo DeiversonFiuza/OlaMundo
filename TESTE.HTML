@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exercício – Unidade V (Redes Corporativas e Internet)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #0f4c75, #3282b8);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1b262c;
+    }
+
+    #app {
+      background: #ffffff;
+      width: 95%;
+      max-width: 900px;
+      border-radius: 18px;
+      padding: 24px 24px 30px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 24px;
+      color: #0f4c75;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 500;
+      color: #555;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .badge {
+      background: #eaf4ff;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0f4c75;
+      font-weight: 600;
+    }
+
+    .progress-wrapper {
+      margin-bottom: 20px;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-bg {
+      height: 10px;
+      background: #e5ecf2;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00b894, #00cec9);
+      transition: width 0.25s ease-out;
+    }
+
+    .card {
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 22px 20px 18px;
+      border: 1px solid #d8e5f3;
+    }
+
+    .questao-numero {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f4c75;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .questao-texto {
+      font-size: 18px;
+      line-height: 1.45;
+      margin-bottom: 18px;
+      color: #222;
+    }
+
+    .opcoes {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .opcao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid #cfd9e6;
+      background: #ffffff;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+
+    .opcao input {
+      accent-color: #0f4c75;
+      transform: scale(1.15);
+    }
+
+    .opcao:hover {
+      background: #f1f7ff;
+      border-color: #0f4c75;
+      box-shadow: 0 0 0 2px rgba(15, 76, 117, 0.06);
+      transform: translateY(-1px);
+    }
+
+    .botao-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0f4c75, #3282b8);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(15, 76, 117, 0.3);
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(15, 76, 117, 0.3);
+    }
+
+    .btn-disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .rodape {
+      margin-top: 12px;
+      font-size: 11px;
+      color: #777;
+      text-align: right;
+    }
+
+    /* Resultado */
+    #resultado {
+      margin-top: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .resultado-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 8px;
+    }
+
+    .resultado-pontos {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f4c75;
+    }
+
+    .resultado-resumo {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .lista-respostas {
+      margin-top: 10px;
+      border-top: 1px solid #dde6f2;
+      padding-top: 10px;
+      font-size: 13px;
+    }
+
+    .item-resposta {
+      padding: 6px 0;
+      border-bottom: 1px dashed #edf2fb;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .item-resposta span {
+      display: inline-block;
+    }
+
+    .item-resposta-rotulo {
+      font-weight: 600;
+      min-width: 92px;
+    }
+
+    .correto {
+      color: #16a085;
+    }
+
+    .errado {
+      color: #c0392b;
+    }
+
+    .scroll-note {
+      font-size: 11px;
+      color: #888;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    @media (max-width: 600px) {
+      #app {
+        padding: 18px 14px 24px;
+      }
+      .questao-texto {
+        font-size: 16px;
+      }
+      .opcoes {
+        flex-direction: column;
+      }
+      .botao-area {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Unidade V – Redes Corporativas e Internet</h1>
+    <h2>Exercício Online – 60 Questões Certo/Errado (Padrão CESPE)</h2>
+
+    <div class="top-bar">
+      <div class="badge">Avaliação Online</div>
+      <div id="info-contador">Questão 1 de 60</div>
+    </div>
+
+    <div class="progress-wrapper">
+      <div class="progress-labels">
+        <span>Progresso</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+    </div>
+
+    <div id="quiz">
+      <div class="card">
+        <div class="questao-numero" id="questao-numero">Questão 1</div>
+        <div class="questao-texto" id="questao-texto"></div>
+
+        <div class="opcoes">
+          <label class="opcao">
+            <input type="radio" name="resposta" value="C" />
+            <span>Certo</span>
+          </label>
+
+          <label class="opcao">
+            <input type="radio" name="resposta" value="E" />
+            <span>Errado</span>
+          </label>
+        </div>
+
+        <div class="botao-area">
+          <button id="btn-avancar" class="btn-primary" onclick="proximaQuestao()">
+            Avançar ➜
+          </button>
+        </div>
+      </div>
+      <div class="rodape">
+        Marque uma opção e clique em <strong>Avançar</strong>. Não é possível voltar às questões anteriores.
+      </div>
+    </div>
+
+    <div id="resultado" style="display: none;"></div>
+    <div id="scroll-note" class="scroll-note" style="display: none;">
+      Role a tela para ver o relatório completo de acertos e erros.
+    </div>
+  </div>
+
+  <script>
+    const questoes = [
+      { texto: "Redes corporativas conectam apenas computadores, não incluindo impressoras, servidores ou telefones IP.", correta: "E" },
+      { texto: "Switches são responsáveis por distribuir dados entre dispositivos da rede local.", correta: "C" },
+      { texto: "Um cabeamento mal estruturado pode causar lentidão e perda de pacotes na rede corporativa.", correta: "C" },
+      { texto: "VPN dispensa o uso de criptografia porque já opera em ambiente seguro.", correta: "E" },
+      { texto: "Firewalls podem controlar tanto acessos externos quanto internos.", correta: "C" },
+      { texto: "MPLS é muito utilizado para interligar filiais de empresas com alta confiabilidade.", correta: "C" },
+      { texto: "A Internet é considerada uma WAN global.", correta: "C" },
+      { texto: "Fibra óptica é mais imune a interferências do que cabos de par trançado.", correta: "C" },
+      { texto: "Servidores da empresa fazem parte apenas da infraestrutura lógica da rede corporativa, nunca da infraestrutura física.", correta: "E" },
+      { texto: "Sistemas ERP e CRM dependem diretamente da rede para funcionar de forma integrada entre os setores.", correta: "C" },
+      { texto: "Telefonia IP funciona normalmente mesmo se a rede corporativa estiver totalmente inoperante.", correta: "E" },
+      { texto: "Computação em nuvem elimina totalmente a necessidade de qualquer rede interna na empresa.", correta: "E" },
+      { texto: "Dispositivos IoT podem ser integrados à rede corporativa para automatizar processos e coletar dados em tempo real.", correta: "C" },
+      { texto: "Redes corporativas garantem comunicação interna e, por definição, nunca podem ter acesso à Internet.", correta: "E" },
+      { texto: "A VPN permite que funcionários acessem sistemas internos da empresa mesmo estando fora do ambiente físico corporativo.", correta: "C" },
+      { texto: "A segurança em redes corporativas envolve apenas uso de senhas, não havendo necessidade de criptografia ou controle de acesso.", correta: "E" },
+      { texto: "Links dedicados costumam garantir menor latência e maior estabilidade de conexão para empresas.", correta: "C" },
+      { texto: "O Wi-Fi corporativo não precisa de segurança adicional, pois já é isolado automaticamente da Internet pública.", correta: "E" },
+      { texto: "Roteadores corporativos ajudam a interligar diferentes redes internas e também a conectar a rede corporativa à Internet.", correta: "C" },
+      { texto: "Uma WAN conecta apenas computadores dentro da mesma sala ou andar de um prédio.", correta: "E" },
+      { texto: "Nuvem no modelo SaaS oferece softwares completos acessados via Internet, sem instalação local.", correta: "C" },
+      { texto: "Um firewall não pode ser configurado para bloquear portas específicas de serviços de rede.", correta: "E" },
+      { texto: "A infraestrutura de rede corporativa inclui cabeamento, racks, switches e roteadores.", correta: "C" },
+      { texto: "VLAN permite separar logicamente setores dentro da mesma rede física, aumentando controle e segurança.", correta: "C" },
+      { texto: "Redes corporativas atuais utilizam exclusivamente IPv6, sem qualquer uso de IPv4.", correta: "E" },
+      { texto: "O switch é classificado como equipamento de camada de enlace (camada 2) no modelo OSI.", correta: "C" },
+      { texto: "Roteadores corporativos operam na camada de rede, tomando decisões de encaminhamento com base em endereços IP.", correta: "C" },
+      { texto: "Os serviços de e-mail corporativo dependem da rede para funcionar, seja ela interna, seja via Internet.", correta: "C" },
+      { texto: "Fabricantes como Cisco, HPE/Aruba e Huawei são exemplos de fornecedores de equipamentos de rede corporativa.", correta: "C" },
+      { texto: "O 5G tende a ampliar o uso de IoT industrial, com maior velocidade e menor latência para dispositivos conectados.", correta: "C" },
+      { texto: "Redes corporativas não utilizam protocolos de segurança, pois a proteção é responsabilidade apenas da aplicação.", correta: "E" },
+      { texto: "Impressoras de rede precisam de endereço IP para serem acessadas pelos computadores da empresa.", correta: "C" },
+      { texto: "A Internet das Coisas no contexto corporativo inclui sensores, câmeras, controladores industriais e outros dispositivos automatizados.", correta: "C" },
+      { texto: "Uma queda em um switch central pode paralisar o acesso a sistemas internos em grande parte da empresa.", correta: "C" },
+      { texto: "Datacenters corporativos são responsáveis por armazenar dados e hospedar serviços críticos de TI.", correta: "C" },
+      { texto: "Cloud Computing permite armazenar arquivos e executar serviços sem necessidade de servidores físicos próprios da empresa.", correta: "C" },
+      { texto: "A criação de VLANs em uma rede nunca influencia no desempenho nem na organização do tráfego.", correta: "E" },
+      { texto: "Empresas usam VPN para proteger informações trafegadas pela Internet, encapsulando e criptografando os dados.", correta: "C" },
+      { texto: "SDN (Software-Defined Networking) é uma abordagem moderna que permite controlar a rede principalmente via software.", correta: "C" },
+      { texto: "Links de Internet residencial costumam oferecer a mesma qualidade, SLA e estabilidade dos links corporativos dedicados.", correta: "E" },
+      { texto: "O backbone de rede é o núcleo de alta capacidade que interliga os principais segmentos de uma rede corporativa.", correta: "C" },
+      { texto: "Racks servem para organizar servidores, switches, patch panels e outros equipamentos de rede em um mesmo gabinete.", correta: "C" },
+      { texto: "Um servidor DNS corporativo pode traduzir nomes de máquinas internas em endereços IP, facilitando o acesso aos sistemas.", correta: "C" },
+      { texto: "Ataques de negação de serviço distribuída (DDoS) podem causar indisponibilidade de serviços corporativos.", correta: "C" },
+      { texto: "Computadores de determinados setores podem ter acesso limitado a sistemas por meio de regras de firewall.", correta: "C" },
+      { texto: "A camada física de uma rede inclui cabos, conectores, sinal elétrico ou óptico e padrões de transmissão.", correta: "C" },
+      { texto: "Uma empresa pode interligar filiais distantes usando somente Wi-Fi doméstico, sem qualquer tecnologia WAN ou VPN.", correta: "E" },
+      { texto: "IoT corporativo pode melhorar automação, monitoramento de ambientes e coleta de métricas em tempo real.", correta: "C" },
+      { texto: "Computação em nuvem é sempre mais barata do que manter servidores locais, independentemente do cenário.", correta: "E" },
+      { texto: "Firewalls podem registrar logs de acesso, ajudando na auditoria e detecção de incidentes de segurança.", correta: "C" },
+      { texto: "Servidores web internos que hospedam sistemas corporativos dependem da rede corporativa para serem acessados pelos usuários.", correta: "C" },
+      { texto: "Qualquer falha grave no cabeamento estruturado pode comprometer a comunicação entre dispositivos da rede.", correta: "C" },
+      { texto: "VPN não é recomendada para acesso remoto seguro a redes corporativas.", correta: "E" },
+      { texto: "Switch gerenciável permite criar VLANs, monitorar tráfego e aplicar configurações avançadas de rede.", correta: "C" },
+      { texto: "Servidores corporativos geralmente utilizam endereços IP fixos para garantir previsibilidade de acesso.", correta: "C" },
+      { texto: "IoT não pode ser utilizada em empresas porque não existem mecanismos para mitigar riscos de segurança.", correta: "E" },
+      { texto: "Cloud Computing exige conexão estável à Internet, pois os recursos são acessados remotamente.", correta: "C" },
+      { texto: "O Wi-Fi corporativo costuma adotar autenticação individual ou baseada em certificados para usuários e dispositivos.", correta: "C" },
+      { texto: "Ataques internos, realizados por usuários da própria empresa, não representam risco relevante para a segurança da informação.", correta: "E" },
+      { texto: "A segurança da informação depende também do comportamento dos usuários, não apenas de tecnologias e ferramentas.", correta: "C" }
+    ];
+
+    let indice = 0;
+    let pontos = 0;
+    let respostasAluno = [];
+
+    function atualizarUI() {
+      const total = questoes.length;
+      const numero = indice + 1;
+      document.getElementById("questao-numero").textContent = "Questão " + numero;
+      document.getElementById("questao-texto").textContent = questoes[indice].texto;
+
+      document.getElementById("info-contador").textContent =
+        "Questão " + numero + " de " + total;
+
+      const percent = Math.round((indice / total) * 100);
+      document.getElementById("progress-bar").style.width = percent + "%";
+      document.getElementById("progress-percent").textContent = percent + "%";
+
+      document
+        .querySelectorAll('input[name="resposta"]')
+        .forEach((r) => (r.checked = false));
+    }
+
+    function proximaQuestao() {
+      const selecionado = document.querySelector('input[name="resposta"]:checked');
+      if (!selecionado) {
+        alert("Selecione uma opção (Certo ou Errado) antes de avançar.");
+        return;
+      }
+
+      const resposta = selecionado.value;
+      const correta = questoes[indice].correta;
+      const numero = indice + 1;
+      let acertou = resposta === correta;
+
+      if (acertou) {
+        pontos++;
+      }
+
+      respostasAluno.push({
+        numero,
+        acertou,
+        correta
+      });
+
+      indice++;
+
+      if (indice < questoes.length) {
+        atualizarUI();
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function mostrarResultado() {
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("scroll-note").style.display = "block";
+
+      const total = questoes.length;
+      const resultadoDiv = document.getElementById("resultado");
+
+      const percentFinal = Math.round((pontos / total) * 100);
+
+      let html = `
+        <div class="resultado-header">
+          <div class="resultado-pontos">Pontuação Final: ${pontos} / ${total}</div>
+          <div class="resultado-resumo">${percentFinal}% de aproveitamento</div>
+        </div>
+        <div class="lista-respostas">
+      `;
+
+      respostasAluno.forEach((r) => {
+        html += `
+          <div class="item-resposta">
+            <span class="item-resposta-rotulo">
+              Questão ${r.numero}
+            </span>
+            <span class="${r.acertou ? "correto" : "errado"}">
+              ${r.acertou ? "✔ Acertou" : "✘ Errou"} 
+              — Gabarito: ${r.correta === "C" ? "Certo" : "Errado"}
+            </span>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+
+      resultadoDiv.innerHTML = html;
+      resultadoDiv.style.display = "block";
+
+      document.getElementById("progress-bar").style.width = "100%";
+      document.getElementById("progress-percent").textContent = "100%";
+      document.getElementById("info-contador").textContent = "Finalizado";
+    }
+
+    // inicializa
+    atualizarUI();
+  </script>
+</body>
+</html>
